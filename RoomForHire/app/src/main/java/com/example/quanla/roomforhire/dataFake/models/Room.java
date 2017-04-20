@@ -5,21 +5,41 @@ package com.example.quanla.roomforhire.dataFake.models;
  */
 
 public class Room {
+    private String title;
+    private String price;
     private String host;
     private String phone;
     private double latitude;
     private double longitude;
 
-    public Room(String host, String phone, double latitude, double longitude) {
+    public Room(String title, String host, String price, String phone, double latitude, double longitude) {
         this.host = host;
         this.phone = phone;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.price = price;
+        this.title =title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Room(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getHost() {
