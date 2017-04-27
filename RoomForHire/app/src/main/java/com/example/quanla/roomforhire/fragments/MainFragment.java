@@ -1,6 +1,7 @@
 package com.example.quanla.roomforhire.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,20 +12,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quanla.roomforhire.R;
+import com.example.quanla.roomforhire.activities.MainActivity;
 import com.example.quanla.roomforhire.adapters.PagerAdapter;
+import com.example.quanla.roomforhire.events.TitleEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import devlight.io.library.ntb.NavigationTabBar;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment {
 
-    @BindView(R.id.view_pager)
+    @BindView(R.id.vp_horizontal_ntb)
     ViewPager viewPager;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
+    @BindView(R.id.ntb_horizontal)
+    NavigationTabBar navigationTabBar;
+
+
+
+
 
 
     public MainFragment() {
@@ -39,13 +51,106 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
 
+        if(getActivity() instanceof MainActivity){
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
+        }
+
+
+        initUI();
+
+
+        return view;
+    }
+
+    private void initUI() {
 
         PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(pagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setTabsFromPagerAdapter(pagerAdapter);
-        return view;
+
+
+
+        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_home_white_24px),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_home_white_24px))
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_stars_white_24px),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_stars_white_24px))
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_add_box_white_24px),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_add_box_white_24px))
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_nearby),
+                        Color.parseColor("#ffffff"))
+                        .selectedIcon(getResources().getDrawable(R.drawable.ic_nearby))
+                        .build()
+        );
+
+        navigationTabBar.setModels(models);
+        navigationTabBar.setViewPager(viewPager, 0);
+        navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(final int position) {
+                if(position==0){
+                    if(getActivity() instanceof MainActivity){
+                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
+                    }
+                }
+                else if(position==1){
+                    if(getActivity() instanceof MainActivity){
+                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Yêu thích");
+                    }
+                }
+                else if(position==2){
+                    if(getActivity() instanceof MainActivity){
+                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Đăng tin");
+                    }
+                }
+                else {
+                    if(getActivity() instanceof MainActivity){
+                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Gần đây");
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(final int state) {
+
+            }
+        });
+
+        navigationTabBar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
+                    final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
+                    navigationTabBar.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            model.showBadge();
+                        }
+                    }, i * 100);
+                }
+            }
+        }, 500);
     }
 
 

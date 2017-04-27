@@ -6,23 +6,26 @@
     tools:context="com.example.quanla.roomforhire.fragments.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.design.widget.TabLayout
-        android:background="#ffffff"
-        android:layout_alignParentTop="true"
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:tabSelectedTextColor="#3F51B5"
-        app:tabTextColor="#E0E0E0"
-        app:tabIndicatorHeight="0dp"
-        >
-
-    </android.support.design.widget.TabLayout>
-    <android.support.v4.view.ViewPager
-        android:layout_below="@id/tab_layout"
-        android:id="@+id/view_pager"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:orientation="vertical">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_horizontal_ntb"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <devlight.io.library.ntb.NavigationTabBar
+            android:id="@+id/ntb_horizontal"
+            app:ntb_bg_color="#FFFFFF"
+            app:ntb_active_color="#3F51B5"
+            app:ntb_inactive_color="#BDBDBD"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:ntb_scaled="true"
+            app:ntb_tinted="true"
+            app:ntb_swiped="true"/>
+    </LinearLayout>
 
 </RelativeLayout>

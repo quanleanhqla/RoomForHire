@@ -128,4 +128,169 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
 
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_marginStart="6dp"
+        android:layout_below="@id/v2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/tv_loai"
+            android:text="Loại"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/loai"
+            android:textColor="#424242"
+            android:text="Cho thuê"
+            android:textStyle="bold"
+            android:layout_marginStart="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Vùng"
+            android:layout_below="@id/tv_loai"
+            android:id="@+id/tv_vung"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@id/tv_loai"
+            android:id="@+id/vung"
+            android:textColor="#424242"
+            android:text="Quận Bắc Từ Liêm, Hà Nội"
+            android:textStyle="bold"
+            android:layout_alignStart="@id/loai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Danh mục"
+            android:layout_below="@id/tv_vung"
+            android:id="@+id/tv_danhmuc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@id/tv_vung"
+            android:id="@+id/danhmuc"
+            android:textColor="#424242"
+            android:text="Phòng trọ cho thuê"
+            android:textStyle="bold"
+            android:layout_alignStart="@id/loai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Tình trạng"
+            android:layout_below="@id/tv_danhmuc"
+            android:id="@+id/tv_tinhtrang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@id/tv_danhmuc"
+            android:id="@+id/tinhtrang"
+            android:textColor="#424242"
+            android:text="Đã sử dụng"
+            android:textStyle="bold"
+            android:layout_alignStart="@id/loai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Diện tích"
+            android:layout_below="@id/tv_tinhtrang"
+            android:id="@+id/tv_dientich"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@id/tv_tinhtrang"
+            android:id="@+id/dientich"
+            android:textColor="#424242"
+            android:text="20 m2"
+            android:textStyle="bold"
+            android:layout_alignStart="@id/loai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Địa chỉ"
+            android:layout_below="@id/tv_dientich"
+            android:id="@+id/tv_diachi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@id/tv_dientich"
+            android:id="@+id/diachi"
+            android:textColor="#424242"
+            android:text="222 Hoàng Công Chất, Hà Nội"
+            android:textStyle="bold"
+            android:layout_alignStart="@id/loai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_call"
+            android:background="#2E7D32"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_marginTop="2dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_old_handphone"/>
+
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:text="Gọi điện"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sms"
+            android:background="#EEEEEE"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_marginTop="2dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_speech_bubble"/>
+
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:text="Gửi SMS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
 </RelativeLayout>

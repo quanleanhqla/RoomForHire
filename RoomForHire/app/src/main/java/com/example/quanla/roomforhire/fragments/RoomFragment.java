@@ -6,14 +6,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.quanla.roomforhire.R;
+import com.example.quanla.roomforhire.activities.MainActivity;
 import com.example.quanla.roomforhire.adapters.RoomAdapter;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
+import com.example.quanla.roomforhire.events.TitleEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,7 +59,6 @@ public class RoomFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_room, container, false);
         ButterKnife.bind(this, view);
-
         roomAdapter = new RoomAdapter();
         rv.setAdapter(roomAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -67,5 +69,19 @@ public class RoomFragment extends Fragment {
     public void replaceFrag(RoomEvent roomEvent){
         EventBus.getDefault().post(new ReplaceFragmentEvent(new DetailRoom(), true));
     }
+
+    @Subscribe(sticky = true)
+    public void getTitle(TitleEvent titleEvent){
+        if(getActivity() instanceof MainActivity){
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(titleEvent.getTitle());
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().removeStickyEvent(TitleEvent.class);
+    }
+
 
 }

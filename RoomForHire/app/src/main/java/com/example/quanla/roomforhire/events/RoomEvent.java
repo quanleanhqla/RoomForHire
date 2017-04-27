@@ -8,9 +8,11 @@ import com.example.quanla.roomforhire.dataFake.models.Room;
 
 public class RoomEvent {
     private Room room;
+    private MoveToMap moveToMap;
 
     public RoomEvent(Room room) {
         this.room = room;
+        moveToMap = MoveToMap.FROMDETAIL;
     }
 
     public Room getRoom() {

@@ -4,9 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.quanla.roomforhire.fragments.AddFragment;
 import com.example.quanla.roomforhire.fragments.ApartmentFragment;
+import com.example.quanla.roomforhire.fragments.HomeFragment;
 import com.example.quanla.roomforhire.fragments.MapFragment;
+import com.example.quanla.roomforhire.fragments.MarkFragment;
 import com.example.quanla.roomforhire.fragments.RoomFragment;
+import com.example.quanla.roomforhire.fragments.SearchFragment;
 import com.example.quanla.roomforhire.fragments.VillaFragment;
 
 /**
@@ -23,14 +27,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
 
         switch (position){
-            case 0:
-                fragment = new RoomFragment();
-                break;
             case 1:
-                fragment = new ApartmentFragment();
+                fragment = new MarkFragment();
+                break;
+            case 0:
+                fragment = new HomeFragment();
                 break;
             case 2:
-                fragment = new VillaFragment();
+                fragment = new AddFragment();
                 break;
             case 3:
                 fragment = new MapFragment();
@@ -45,23 +49,5 @@ public class PagerAdapter extends FragmentPagerAdapter {
         return 4;
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        String title = "";
-        switch (position){
-            case 0:
-                title = "Phòng trọ";
-                break;
-            case 1:
-                title = "Căn hộ";
-                break;
-            case 2:
-                title = "Biệt thự";
-                break;
-            case 3:
-                title = "Quanh đây";
-                break;
-        }
-        return title;
-    }
+
 }

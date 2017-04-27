@@ -22,8 +22,11 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.quanla.roomforhire.R;
+import com.example.quanla.roomforhire.activities.MainActivity;
 import com.example.quanla.roomforhire.dataFake.DataFake;
 import com.example.quanla.roomforhire.dataFake.models.Room;
+import com.example.quanla.roomforhire.events.MoveToMap;
+import com.example.quanla.roomforhire.events.RoomEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -41,6 +44,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +56,8 @@ import java.util.List;
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, RoutingListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
+    private MoveToMap moveToMap=MoveToMap.FROMNEAR;
+    private Room room;
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
@@ -73,6 +81,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
 
         mMapView.onResume();
 
@@ -115,6 +124,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     public void onRoutingStart() {
 
     }
+
 
     @Override
     public void onRoutingSuccess(ArrayList<Route> arrayList, int index) {
@@ -190,19 +200,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-        Location start = new Location("Start");
-        start.setLatitude(mLatitude);
-        start.setLongitude(mLongitude);
-        if(mMap!=null) {
-            for (final Room l : DataFake.instance.getAllRoom()) {
-                Location dest = new Location(l.getTitle());
-                dest.setLatitude(l.getLatitude());
-                dest.setLongitude(l.getLongitude());
-                if (start.distanceTo(dest) <= 10000) {
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())).title(l.getTitle()).draggable(true).visible(true));
-                }
-            }
-        }
+        setGGMap();
     }
 
     @Override
@@ -316,5 +314,44 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         }
     }
 
+    public void setGGMap() {
+        if (mMap != null) {
+            if (moveToMap == MoveToMap.FROMDETAIL) {
+                Location dest = new Location(room.getTitle());
+                dest.setLatitude(room.getLatitude());
+                dest.setLongitude(room.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(new LatLng(room.getLatitude(), room.getLongitude())).title(room.getTitle()).draggable(true).visible(true));
+                direction(room);
+            }
+            else {
+                Location start = new Location("Start");
+                start.setLatitude(mLatitude);
+                start.setLongitude(mLongitude);
+                for (final Room l : DataFake.instance.getAllRoom()) {
+                    Location dest = new Location(l.getTitle());
+                    dest.setLatitude(l.getLatitude());
+                    dest.setLongitude(l.getLongitude());
+                    if (start.distanceTo(dest) <= 5000) {
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())).title(l.getTitle()).draggable(true).visible(true));
+                    }
+                }
+            }
+        }
+    }
 
+    @Subscribe(sticky = true)
+    public void getRoom(RoomEvent roomEvent){
+        room = roomEvent.getRoom();
+        moveToMap = MoveToMap.FROMDETAIL;
+        if(getActivity() instanceof MainActivity){
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(room.getTitle());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().removeAllStickyEvents();
+    }
 }

@@ -4,6 +4,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onStart() {
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         MainFragment mainFragment = new MainFragment();
         replaceFragment(mainFragment, false);
+
+
 
     }
 
