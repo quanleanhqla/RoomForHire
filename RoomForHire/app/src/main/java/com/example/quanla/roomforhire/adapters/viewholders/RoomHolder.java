@@ -33,7 +33,7 @@ public class RoomHolder extends RecyclerView.ViewHolder {
     public void bind(Room room){
         iv.setImageResource(R.drawable.rooma);
         title.setText(room.getTitle());
-        address.setText("110 Xuân Thủy, Cầu Giấy, Hà Nội");
+        address.setText(room.getAddress());
         price.setText(room.getPrice());
     }
 }

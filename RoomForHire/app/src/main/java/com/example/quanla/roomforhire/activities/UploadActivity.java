@@ -1,12 +1,10 @@
-package com.example.quanla.roomforhire.fragments;
+package com.example.quanla.roomforhire.activities;
 
-
+import android.app.ProgressDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,14 +15,12 @@ import android.widget.Toast;
 import com.example.quanla.roomforhire.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StreamDownloadTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class AddFragment extends Fragment {
+public class UploadActivity extends AppCompatActivity {
 
     @BindView(R.id.edt_title)
     EditText edt_title;
@@ -51,18 +47,11 @@ public class AddFragment extends Fragment {
 
     private DatabaseReference data;
 
-
-    public AddFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add, container, false);
-        ButterKnife.bind(this, view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_upload);
+        ButterKnife.bind(this);
         data = FirebaseDatabase.getInstance().getReference().child("new");
         setupUI();
         btn_post.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +60,7 @@ public class AddFragment extends Fragment {
                 post();
             }
         });
-        return view;
+
     }
 
     private void setupUI() {
@@ -87,7 +76,7 @@ public class AddFragment extends Fragment {
                 "Huyện Mỹ Đức", "Huyện Phúc Thọ", "Huyện Thanh Oai",
                 "Huyện Ứng Hòa"};
 
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, arr_vung);
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arr_vung);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         sp_vung.setAdapter(adapter);
         sp_vung.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -103,7 +92,7 @@ public class AddFragment extends Fragment {
         });
 
         final String arr_state[] = {"Tình trạng", "Chưa qua sử dụng", "Đã qua sử dụng"};
-        ArrayAdapter<String> adapter_state = new ArrayAdapter<String>(this.getContext(),android.R.layout.simple_spinner_item, arr_state);
+        ArrayAdapter<String> adapter_state = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arr_state);
         adapter_state.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         sp_state.setAdapter(adapter_state);
         sp_state.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -120,7 +109,7 @@ public class AddFragment extends Fragment {
 
         final String arr_type[] = {"Loại", "Cần bán", "Cần cho thuê"};
 
-        ArrayAdapter<String> adapter_type = new ArrayAdapter<String>(this.getContext(),android.R.layout.simple_spinner_item, arr_type);
+        ArrayAdapter<String> adapter_type = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arr_type);
         adapter_type.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         sp_type.setAdapter(adapter_type);
         sp_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,9 +151,8 @@ public class AddFragment extends Fragment {
             newData.child("vung").setValue(vung);
             newData.child("type").setValue(type);
             newData.child("state").setValue(state);
-            Toast.makeText(this.getContext(), "Đăng tin thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đăng tin thành công", Toast.LENGTH_SHORT).show();
         }
-        else Toast.makeText(this.getContext(), "Bạn nhập thiếu", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "Bạn nhập thiếu", Toast.LENGTH_SHORT).show();
     }
-
 }

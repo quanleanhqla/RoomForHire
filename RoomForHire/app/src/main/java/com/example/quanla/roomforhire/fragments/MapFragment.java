@@ -22,7 +22,7 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.quanla.roomforhire.R;
-import com.example.quanla.roomforhire.activities.MainActivity;
+import com.example.quanla.roomforhire.activities.CoreActivity;
 import com.example.quanla.roomforhire.dataFake.DataFake;
 import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.MoveToMap;
@@ -343,8 +343,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     public void getRoom(RoomEvent roomEvent){
         room = roomEvent.getRoom();
         moveToMap = MoveToMap.FROMDETAIL;
-        if(getActivity() instanceof MainActivity){
-            ((MainActivity) getActivity()).getSupportActionBar().setTitle(room.getTitle());
+        if(getActivity() instanceof CoreActivity){
+            ((CoreActivity) getActivity()).getSupportActionBar().setTitle(room.getTitle());
         }
     }
 

@@ -1,8 +1,13 @@
 package com.example.quanla.roomforhire.fragments;
 
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +17,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quanla.roomforhire.R;
-import com.example.quanla.roomforhire.activities.MainActivity;
+import com.example.quanla.roomforhire.activities.CoreActivity;
 import com.example.quanla.roomforhire.adapters.PhotoAdapter;
+
+import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
 
@@ -43,6 +52,23 @@ public class DetailRoom extends Fragment {
     TextView phone;
     @BindView(R.id.tv_host)
     TextView host;
+    @BindView(R.id.tv_detail)
+    TextView tv_detail;
+    @BindView(R.id.loai)
+    TextView loai;
+    @BindView(R.id.vung)
+    TextView vung;
+    @BindView(R.id.danhmuc)
+    TextView danhmuc;
+    @BindView(R.id.tinhtrang)
+    TextView tinhtrang;
+    @BindView(R.id.dientich)
+    TextView dientich;
+    @BindView(R.id.diachi)
+    TextView diachi;
+    @BindView(R.id.ll_call)
+    LinearLayout ll_call;
+    private Room room;
     private PhotoAdapter photoAdapter;
 
     public DetailRoom() {
@@ -71,6 +97,12 @@ public class DetailRoom extends Fragment {
         photoAdapter = new PhotoAdapter();
         rv.setAdapter(photoAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ll_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call();
+            }
+        });
         return view;
     }
 
@@ -83,13 +115,21 @@ public class DetailRoom extends Fragment {
 
     @Subscribe(sticky = true)
     public void getRoom(RoomEvent roomEvent){
+        room = roomEvent.getRoom();
         title.setText(roomEvent.getRoom().getTitle());
-        address.setText("119 Xuân Thủy, Cầu Giấy, Hà Nội");
+        address.setText(roomEvent.getRoom().getAddress());
         price.setText(roomEvent.getRoom().getPrice());
         phone.setText(roomEvent.getRoom().getPhone());
         host.setText(roomEvent.getRoom().getHost());
-        if(getActivity() instanceof MainActivity){
-            ((MainActivity) getActivity()).getSupportActionBar().setTitle(roomEvent.getRoom().getTitle());
+        loai.setText(roomEvent.getRoom().getType());
+        vung.setText(roomEvent.getRoom().getVung());
+        tinhtrang.setText(roomEvent.getRoom().getState());
+        danhmuc.setText(roomEvent.getRoom().getDanhmuc());
+        dientich.setText(roomEvent.getRoom().getDientich());
+        diachi.setText(roomEvent.getRoom().getAddress());
+        tv_detail.setText(roomEvent.getRoom().getDetail());
+        if(getActivity() instanceof CoreActivity){
+            ((CoreActivity) getActivity()).getSupportActionBar().setTitle(roomEvent.getRoom().getTitle());
         }
 
     }
@@ -106,6 +146,10 @@ public class DetailRoom extends Fragment {
             EventBus.getDefault().post(new ReplaceFragmentEvent(new MapFragment(), true));
             return true;
         }
+//        if(item.getItemId()==R.id.mn_star){
+//            DataMark.instance.addOrUpdate(room);
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -114,4 +158,23 @@ public class DetailRoom extends Fragment {
         super.onDestroy();
         EventBus.getDefault().removeStickyEvent(RoomEvent.class);
     }
+
+    private void call() {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:900"));
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this.getActivity(),
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    10);
+            return;
+        } else {
+            try {
+                startActivity(callIntent);
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this.getContext(), "yourActivity is not founded", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

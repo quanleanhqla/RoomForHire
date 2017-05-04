@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "907709946036",
+    "firebase_url": "https://roomforhire-e0ddb.firebaseio.com",
+    "project_id": "roomforhire-e0ddb",
+    "storage_bucket": "roomforhire-e0ddb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907709946036:android:20eb041cfd512fd9",
+        "android_client_info": {
+          "package_name": "com.example.quanla.roomforhire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907709946036-2kkt41bvrvdc04cdpgnq2s652bblu8ol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quanla.roomforhire",
+            "certificate_hash": "fabe798b8c3835dbff3d9c9325208743efff2054"
+          }
+        },
+        {
+          "client_id": "907709946036-vdf2gk0mkia3vdbt8do6jpt9jfoaps5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGRJ73-qrSM0s4KUnmMfpmTzpMfUnEzkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907709946036-vdf2gk0mkia3vdbt8do6jpt9jfoaps5b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

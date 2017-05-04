@@ -1,22 +1,29 @@
 package com.example.quanla.roomforhire.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.example.quanla.roomforhire.R;
-import com.example.quanla.roomforhire.activities.MainActivity;
+import com.example.quanla.roomforhire.activities.CoreActivity;
 import com.example.quanla.roomforhire.adapters.RoomAdapter;
+import com.example.quanla.roomforhire.dataFake.DataRoom;
+import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
 import com.example.quanla.roomforhire.events.TitleEvent;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,8 +40,14 @@ public class RoomFragment extends Fragment {
 
     @BindView(R.id.rvroom)
     RecyclerView rv;
+    private ProgressDialog progressDialog;
+
+    private String[] allName = {"Có phòng cho thuê"};
+    private static String TAG = "dcm";
 
     private RoomAdapter roomAdapter;
+    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public RoomFragment() {
         // Required empty public constructor
@@ -62,6 +75,9 @@ public class RoomFragment extends Fragment {
         roomAdapter = new RoomAdapter();
         rv.setAdapter(roomAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        progressDialog =  new ProgressDialog(this.getContext());
+
+        loadData();
         return view;
     }
 
@@ -72,8 +88,8 @@ public class RoomFragment extends Fragment {
 
     @Subscribe(sticky = true)
     public void getTitle(TitleEvent titleEvent){
-        if(getActivity() instanceof MainActivity){
-            ((MainActivity) getActivity()).getSupportActionBar().setTitle(titleEvent.getTitle());
+        if(getActivity() instanceof CoreActivity){
+            ((CoreActivity) getActivity()).getSupportActionBar().setTitle(titleEvent.getTitle());
         }
     }
 
@@ -81,6 +97,32 @@ public class RoomFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().removeStickyEvent(TitleEvent.class);
+    }
+
+    public void loadData(){
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                DataRoom.instance.clear();
+                for(int i=0; i<allName.length; i++){
+                    Room room = dataSnapshot.child("room").child(allName[i]).getValue(Room.class);
+                    DataRoom.instance.add(room);
+                }
+                progressDialog.dismiss();
+                roomAdapter.notifyDataSetChanged();
+                Log.d(TAG, String.format("%s", DataRoom.instance.getAllRoom().toString()));
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

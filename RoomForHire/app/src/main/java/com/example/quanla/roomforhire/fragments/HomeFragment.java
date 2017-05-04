@@ -49,6 +49,20 @@ public class HomeFragment extends Fragment {
                 EventBus.getDefault().postSticky(new TitleEvent("Phòng trọ cho thuê"));
             }
         });
+        rl_apartment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new ReplaceFragmentEvent(new ApartmentFragment(), true));
+                EventBus.getDefault().postSticky(new TitleEvent("Căn hộ chung cư"));
+            }
+        });
+        rl_villa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new ReplaceFragmentEvent(new VillaFragment(), true));
+                EventBus.getDefault().postSticky(new TitleEvent("Biệt thự cao cấp"));
+            }
+        });
         return view;
     }
 

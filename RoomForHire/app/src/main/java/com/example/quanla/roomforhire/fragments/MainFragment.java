@@ -3,20 +3,15 @@ package com.example.quanla.roomforhire.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quanla.roomforhire.R;
-import com.example.quanla.roomforhire.activities.MainActivity;
+import com.example.quanla.roomforhire.activities.CoreActivity;
 import com.example.quanla.roomforhire.adapters.PagerAdapter;
-import com.example.quanla.roomforhire.events.TitleEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -51,8 +46,8 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
 
-        if(getActivity() instanceof MainActivity){
-            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
+        if(getActivity() instanceof CoreActivity){
+            ((CoreActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
         }
 
 
@@ -110,23 +105,23 @@ public class MainFragment extends Fragment {
             @Override
             public void onPageSelected(final int position) {
                 if(position==0){
-                    if(getActivity() instanceof MainActivity){
-                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
+                    if(getActivity() instanceof CoreActivity){
+                        ((CoreActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
                     }
                 }
                 else if(position==1){
-                    if(getActivity() instanceof MainActivity){
-                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Yêu thích");
+                    if(getActivity() instanceof CoreActivity){
+                        ((CoreActivity) getActivity()).getSupportActionBar().setTitle("Yêu thích");
                     }
                 }
                 else if(position==2){
-                    if(getActivity() instanceof MainActivity){
-                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Đăng tin");
+                    if(getActivity() instanceof CoreActivity){
+                        ((CoreActivity) getActivity()).getSupportActionBar().setTitle("Đăng tin");
                     }
                 }
                 else {
-                    if(getActivity() instanceof MainActivity){
-                        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Gần đây");
+                    if(getActivity() instanceof CoreActivity){
+                        ((CoreActivity) getActivity()).getSupportActionBar().setTitle("Gần đây");
                     }
                 }
             }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.quanla.roomforhire.R;
 import com.example.quanla.roomforhire.adapters.viewholders.RoomHolder;
 import com.example.quanla.roomforhire.dataFake.DataFake;
+import com.example.quanla.roomforhire.dataFake.DataRoom;
 import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.RoomEvent;
 
@@ -29,7 +30,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomHolder> {
 
     @Override
     public void onBindViewHolder(RoomHolder holder, int position) {
-        final Room room = DataFake.instance.getAllRoom().get(position);
+        final Room room = DataRoom.instance.getAllRoom().get(position);
 
         holder.bind(room);
 
@@ -44,6 +45,6 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomHolder> {
 
     @Override
     public int getItemCount() {
-        return DataFake.instance.getAllRoom().size();
+        return DataRoom.instance.getAllRoom().size();
     }
 }
