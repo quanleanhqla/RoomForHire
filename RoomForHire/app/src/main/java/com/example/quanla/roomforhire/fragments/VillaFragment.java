@@ -19,6 +19,7 @@ import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
 import com.example.quanla.roomforhire.events.TitleEvent;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,21 +100,54 @@ public class VillaFragment extends Fragment {
     }
 
     public void loadData(){
+//        progressDialog.setMessage("Loading...");
+//        progressDialog.show();
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                DataRoom.instance.clear();
+//                for(int i=0; i<allName.length; i++){
+//                    Room room = dataSnapshot.child("villaa").child(allName[i]).getValue(Room.class);
+//                    DataRoom.instance.add(room);
+//                }
+//                progressDialog.dismiss();
+//                roomAdapter.notifyDataSetChanged();
+//                Log.d(TAG, String.format("%s", DataRoom.instance.getAllRoom().toString()));
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+        DataRoom.instance.clear();
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("villa").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                DataRoom.instance.clear();
-                for(int i=0; i<allName.length; i++){
-                    Room room = dataSnapshot.child("villa").child(allName[i]).getValue(Room.class);
-                    DataRoom.instance.add(room);
-                }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+                DataRoom.instance.add(room);
                 progressDialog.dismiss();
                 roomAdapter.notifyDataSetChanged();
                 Log.d(TAG, String.format("%s", DataRoom.instance.getAllRoom().toString()));
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
 

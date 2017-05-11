@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,23 +26,27 @@ import com.example.quanla.roomforhire.R;
 import com.example.quanla.roomforhire.activities.CoreActivity;
 import com.example.quanla.roomforhire.adapters.PhotoAdapter;
 
+import com.example.quanla.roomforhire.adapters.SamplePagerAdapter;
 import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DetailRoom extends Fragment {
 
-    @BindView(R.id.rv_anh)
-    RecyclerView rv;
+//    @BindView(R.id.rv_anh)
+//    RecyclerView rv;
     @BindView(R.id.tv_title)
     TextView title;
     @BindView(R.id.tv_address)
@@ -68,8 +73,19 @@ public class DetailRoom extends Fragment {
     TextView diachi;
     @BindView(R.id.ll_call)
     LinearLayout ll_call;
+
+//    @BindView(R.id.mn_star)
+//    MenuItem menuItem;
+
+    @BindView(R.id.v)
+    ViewPager viewPager;
+    @BindView(R.id.indicator)
+    CircleIndicator indicator;
     private Room room;
-    private PhotoAdapter photoAdapter;
+
+    //private PhotoAdapter photoAdapter;
+    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public DetailRoom() {
         // Required empty public constructor
@@ -94,9 +110,13 @@ public class DetailRoom extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_room, container, false);
         ButterKnife.bind(this, view);
 
-        photoAdapter = new PhotoAdapter();
-        rv.setAdapter(photoAdapter);
-        rv.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        viewPager.setAdapter(new SamplePagerAdapter());
+        indicator.setViewPager(viewPager);
+        viewPager.setCurrentItem(0);
+
+//        photoAdapter = new PhotoAdapter();
+//        rv.setAdapter(photoAdapter);
+//        rv.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         ll_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +130,7 @@ public class DetailRoom extends Fragment {
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        databaseReference.child(room.getDanhmuc()).child(room.getTitle()).child("check").setValue(room.getCheck());
         //EventBus.getDefault().removeAllStickyEvents();
     }
 
@@ -117,17 +138,21 @@ public class DetailRoom extends Fragment {
     public void getRoom(RoomEvent roomEvent){
         room = roomEvent.getRoom();
         title.setText(roomEvent.getRoom().getTitle());
-        address.setText(roomEvent.getRoom().getAddress());
+        address.setText(roomEvent.getRoom().getAddressHost());
         price.setText(roomEvent.getRoom().getPrice());
         phone.setText(roomEvent.getRoom().getPhone());
         host.setText(roomEvent.getRoom().getHost());
         loai.setText(roomEvent.getRoom().getType());
         vung.setText(roomEvent.getRoom().getVung());
         tinhtrang.setText(roomEvent.getRoom().getState());
-        danhmuc.setText(roomEvent.getRoom().getDanhmuc());
+        if(room.getDanhmuc().equals("room")) danhmuc.setText("Phòng trọ cho thuê");
+        else if(room.getDanhmuc().equals("villa")) danhmuc.setText("Biệt thự cao cấp");
+        else danhmuc.setText("Căn hộ chung cư");
         dientich.setText(roomEvent.getRoom().getDientich());
         diachi.setText(roomEvent.getRoom().getAddress());
         tv_detail.setText(roomEvent.getRoom().getDetail());
+//        if(room.getCheck()==1) menuItem.setIcon(R.drawable.ic_stars_check);
+//        else menuItem.setIcon(R.drawable.ic_stars);
         if(getActivity() instanceof CoreActivity){
             ((CoreActivity) getActivity()).getSupportActionBar().setTitle(roomEvent.getRoom().getTitle());
         }
@@ -137,6 +162,9 @@ public class DetailRoom extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_location, menu);
+        MenuItem star = menu.findItem(R.id.mn_star);
+        if(room.getCheck()==1) star.setIcon(R.drawable.ic_stars_check);
+        else star.setIcon(R.drawable.ic_stars);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -146,10 +174,12 @@ public class DetailRoom extends Fragment {
             EventBus.getDefault().post(new ReplaceFragmentEvent(new MapFragment(), true));
             return true;
         }
-//        if(item.getItemId()==R.id.mn_star){
-//            DataMark.instance.addOrUpdate(room);
-//            return true;
-//        }
+        if(item.getItemId()==R.id.mn_star){
+            room.setCheck(room.getCheck()*(-1));
+            if(room.getCheck()==1) item.setIcon(R.drawable.ic_stars_check);
+            else item.setIcon(R.drawable.ic_stars);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -176,5 +206,6 @@ public class DetailRoom extends Fragment {
             }
         }
     }
+
 
 }

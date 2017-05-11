@@ -40,7 +40,6 @@
             android:layout_marginBottom="6dp"
             android:textStyle="bold"
             android:textColor="#F44336"
-            android:layout_marginTop="5dp"
             android:layout_alignBottom="@id/iv"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/iv"

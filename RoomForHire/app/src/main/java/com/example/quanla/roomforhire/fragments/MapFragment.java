@@ -331,8 +331,10 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                     Location dest = new Location(l.getTitle());
                     dest.setLatitude(l.getLatitude());
                     dest.setLongitude(l.getLongitude());
-                    if (start.distanceTo(dest) <= 5000) {
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())).title(l.getTitle()).draggable(true).visible(true));
+                    if (start.distanceTo(dest) <= 10000) {
+                        if(l.getDanhmuc().equals("apartment")) mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())).title(l.getTitle()).draggable(true).visible(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.aparment)));
+                        else if(l.getDanhmuc().equals("room")) mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())).title(l.getTitle()).draggable(true).visible(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.opened_door_aperture)));
+                        else mMap.addMarker(new MarkerOptions().position(new LatLng(l.getLatitude(), l.getLongitude())).title(l.getTitle()).draggable(true).visible(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.villaa)));
                     }
                 }
             }

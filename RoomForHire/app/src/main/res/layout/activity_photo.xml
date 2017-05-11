@@ -6,12 +6,11 @@
     android:background="#000000"
     tools:context="com.example.quanla.roomforhire.activities.PhotoActivity">
 
-    <ImageView
-        android:scaleType="fitXY"
-        android:src="@drawable/hk2"
-        android:id="@+id/iv_image"
+    <com.github.chrisbanes.photoview.PhotoView
         android:layout_centerInParent="true"
+        android:src="@drawable/villa"
+        android:id="@+id/photo_view"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

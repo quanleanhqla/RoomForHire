@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class DataPhoto {
 
     private ArrayList<Photo> allPhoto;
+    private ArrayList<Integer> photo;
 
     public static final DataPhoto instance  = new DataPhoto();
 
@@ -24,5 +25,13 @@ public class DataPhoto {
         allPhoto.add(new Photo(R.drawable.tro3));
 
         return allPhoto;
+    }
+
+    public ArrayList<Integer> getPhoto(){
+        if(photo==null) photo = new ArrayList<>();
+        photo.add(R.drawable.tro1);
+        photo.add(R.drawable.tro2);
+        photo.add(R.drawable.tro3);
+        return photo;
     }
 }

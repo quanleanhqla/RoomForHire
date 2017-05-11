@@ -9,6 +9,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class Room  {
     //@PrimaryKey
+    private int check = -1;
     private String id;
     private String detail;
     private String title;
@@ -51,6 +52,14 @@ public class Room  {
     public Room(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public int getCheck() {
+        return check;
+    }
+
+    public void setCheck(int check) {
+        this.check = check;
     }
 
     public String getId() {
