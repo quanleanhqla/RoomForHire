@@ -19,6 +19,7 @@ import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
 import com.example.quanla.roomforhire.events.TitleEvent;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,11 +33,13 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class VillaFragment extends Fragment {
 
+    private FirebaseAuth firebaseAuth;
     @BindView(R.id.rvroom)
     RecyclerView rv;
     private ProgressDialog progressDialog;
@@ -76,6 +79,7 @@ public class VillaFragment extends Fragment {
         rv.setAdapter(roomAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this.getContext()));
         progressDialog =  new ProgressDialog(this.getContext());
+        firebaseAuth =FirebaseAuth.getInstance();
 
         loadData();
         return view;
@@ -126,7 +130,7 @@ public class VillaFragment extends Fragment {
         DataRoom.instance.clear();
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        databaseReference.child("villa").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("villa").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);

@@ -28,8 +28,10 @@ import com.example.quanla.roomforhire.adapters.PhotoAdapter;
 
 import com.example.quanla.roomforhire.adapters.SamplePagerAdapter;
 import com.example.quanla.roomforhire.dataFake.models.Room;
+import com.example.quanla.roomforhire.events.Event;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -39,6 +41,8 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
+
+import static com.google.android.gms.instantapps.InstantApps.getPackageManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,6 +77,8 @@ public class DetailRoom extends Fragment {
     TextView diachi;
     @BindView(R.id.ll_call)
     LinearLayout ll_call;
+    @BindView(R.id.ll_sms)
+    LinearLayout ll_sms;
 
 //    @BindView(R.id.mn_star)
 //    MenuItem menuItem;
@@ -82,6 +88,7 @@ public class DetailRoom extends Fragment {
     @BindView(R.id.indicator)
     CircleIndicator indicator;
     private Room room;
+    private FirebaseAuth firebaseAuth;
 
     //private PhotoAdapter photoAdapter;
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -110,6 +117,7 @@ public class DetailRoom extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_room, container, false);
         ButterKnife.bind(this, view);
 
+        firebaseAuth =FirebaseAuth.getInstance();
         viewPager.setAdapter(new SamplePagerAdapter());
         indicator.setViewPager(viewPager);
         viewPager.setCurrentItem(0);
@@ -123,6 +131,16 @@ public class DetailRoom extends Fragment {
                 call();
             }
         });
+        ll_sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                smsIntent.setType("vnd.android-dir/mms-sms");
+                smsIntent.putExtra("address", "900");
+                smsIntent.putExtra("sms_body","Tôi đã xem bài đăng của bạn và ...");
+                startActivity(smsIntent);
+            }
+        });
         return view;
     }
 
@@ -130,12 +148,37 @@ public class DetailRoom extends Fragment {
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-        databaseReference.child(room.getDanhmuc()).child(room.getTitle()).child("check").setValue(room.getCheck());
+        databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child(room.getDanhmuc()).child(room.getTitle()).child("check").setValue(room.getCheck());
         //EventBus.getDefault().removeAllStickyEvents();
     }
 
     @Subscribe(sticky = true)
     public void getRoom(RoomEvent roomEvent){
+        room = roomEvent.getRoom();
+        title.setText(roomEvent.getRoom().getTitle());
+        address.setText(roomEvent.getRoom().getAddressHost());
+        price.setText(roomEvent.getRoom().getPrice());
+        phone.setText(roomEvent.getRoom().getPhone());
+        host.setText(roomEvent.getRoom().getHost());
+        loai.setText(roomEvent.getRoom().getType());
+        vung.setText(roomEvent.getRoom().getVung());
+        tinhtrang.setText(roomEvent.getRoom().getState());
+        if(room.getDanhmuc().equals("room")) danhmuc.setText("Phòng trọ cho thuê");
+        else if(room.getDanhmuc().equals("villa")) danhmuc.setText("Biệt thự cao cấp");
+        else danhmuc.setText("Căn hộ chung cư");
+        dientich.setText(roomEvent.getRoom().getDientich());
+        diachi.setText(roomEvent.getRoom().getAddress());
+        tv_detail.setText(roomEvent.getRoom().getDetail());
+//        if(room.getCheck()==1) menuItem.setIcon(R.drawable.ic_stars_check);
+//        else menuItem.setIcon(R.drawable.ic_stars);
+        if(getActivity() instanceof CoreActivity){
+            ((CoreActivity) getActivity()).getSupportActionBar().setTitle(roomEvent.getRoom().getTitle());
+        }
+
+    }
+
+    @Subscribe(sticky = true)
+    public void get(Event roomEvent){
         room = roomEvent.getRoom();
         title.setText(roomEvent.getRoom().getTitle());
         address.setText(roomEvent.getRoom().getAddressHost());
@@ -187,6 +230,7 @@ public class DetailRoom extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().removeStickyEvent(RoomEvent.class);
+        EventBus.getDefault().removeStickyEvent(Event.class);
     }
 
     private void call() {
@@ -206,6 +250,8 @@ public class DetailRoom extends Fragment {
             }
         }
     }
+
+
 
 
 }

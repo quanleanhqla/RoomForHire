@@ -19,6 +19,7 @@ import com.example.quanla.roomforhire.dataFake.DataRoom;
 import com.example.quanla.roomforhire.dataFake.models.Room;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +41,8 @@ public class MarkFragment extends Fragment {
     @BindView(R.id.rv)
     RecyclerView rv;
 
+    private FirebaseAuth firebaseAuth;
+
     private ProgressDialog progressDialog;
     private MarkAdapter markAdapter;
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -59,6 +62,7 @@ public class MarkFragment extends Fragment {
         markAdapter = new MarkAdapter();
         rv.setAdapter(markAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        firebaseAuth = FirebaseAuth.getInstance();
         loadData();
         return view;
     }
@@ -89,14 +93,14 @@ public class MarkFragment extends Fragment {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         progressDialog.setCancelable(false);
-        databaseReference.child("apartment").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("apartment").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);
                 if(room.getCheck()==1) {
                     DataMark.instance.add(room);
                 }
-                DataFake.instance.add(room);
+                //DataFake.instance.add(room);
                 markAdapter.notifyDataSetChanged();
             }
 
@@ -121,14 +125,14 @@ public class MarkFragment extends Fragment {
             }
         });
 
-        databaseReference.child("room").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);
                 if(room.getCheck()==1) {
                     DataMark.instance.add(room);
                 }
-                DataFake.instance.add(room);
+                //DataFake.instance.add(room);
                 markAdapter.notifyDataSetChanged();
             }
 
@@ -153,14 +157,14 @@ public class MarkFragment extends Fragment {
             }
         });
 
-        databaseReference.child("villa").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("villa").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);
                 if(room.getCheck()==1) {
                     DataMark.instance.add(room);
                 }
-                DataFake.instance.add(room);
+                //DataFake.instance.add(room);
                 progressDialog.dismiss();
                 markAdapter.notifyDataSetChanged();
             }

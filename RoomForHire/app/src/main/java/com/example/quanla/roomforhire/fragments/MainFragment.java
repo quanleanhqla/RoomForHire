@@ -1,6 +1,7 @@
 package com.example.quanla.roomforhire.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,16 @@ import android.view.ViewGroup;
 
 import com.example.quanla.roomforhire.R;
 import com.example.quanla.roomforhire.activities.CoreActivity;
+import com.example.quanla.roomforhire.activities.LoginActivity;
 import com.example.quanla.roomforhire.adapters.PagerAdapter;
+import com.example.quanla.roomforhire.dataFake.DataFake;
+import com.example.quanla.roomforhire.dataFake.models.Room;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -30,6 +40,9 @@ public class MainFragment extends Fragment {
     NavigationTabBar navigationTabBar;
 
 
+    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
+    private FirebaseAuth firebaseAuth;
 
 
 
@@ -49,6 +62,8 @@ public class MainFragment extends Fragment {
         if(getActivity() instanceof CoreActivity){
             ((CoreActivity) getActivity()).getSupportActionBar().setTitle("Trang chủ");
         }
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
 
         initUI();
@@ -147,6 +162,7 @@ public class MainFragment extends Fragment {
             }
         }, 500);
     }
+
 
 
 }

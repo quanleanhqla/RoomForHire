@@ -26,12 +26,92 @@
             android:id="@+id/textViewUserEmail"
             android:layout_gravity="center_horizontal" />
 
-        <Button
+
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Log out"
-            android:id="@+id/buttonLogout"
-            android:layout_gravity="center_horizontal" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="16dp"
+                android:layout_marginTop="5dp"
+                android:hint="Tôi là"
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="70dp"
+                android:textColor="#F44336"
+                android:layout_toEndOf="@id/name"
+                android:id="@+id/txt_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="16dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/name"
+                android:hint="Địa chỉ"
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/name"
+                android:layout_alignStart="@id/txt_name"
+                android:textColor="#F44336"
+                android:layout_toEndOf="@id/address"
+                android:id="@+id/txt_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:textSize="16dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/address"
+                android:hint="Số điện thoại"
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/address"
+                android:layout_alignStart="@id/txt_name"
+                android:textColor="#F44336"
+                android:layout_toEndOf="@id/phone"
+                android:id="@+id/txt_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+
+
+
+
+
     </LinearLayout>
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đăng xuất"
+        android:id="@+id/buttonLogout"
+        android:layout_gravity="center_horizontal" />
 
 </RelativeLayout>

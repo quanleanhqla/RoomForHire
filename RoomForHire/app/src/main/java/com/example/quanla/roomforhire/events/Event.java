@@ -3,14 +3,14 @@ package com.example.quanla.roomforhire.events;
 import com.example.quanla.roomforhire.dataFake.models.Room;
 
 /**
- * Created by QuanLA on 4/21/2017.
+ * Created by QuanLA on 5/12/2017.
  */
 
-public class RoomEvent {
+public class Event {
     private Room room;
     private MoveToMap moveToMap;
 
-    public RoomEvent(Room room, MoveToMap moveToMap) {
+    public Event(Room room, MoveToMap moveToMap) {
         this.room = room;
         moveToMap = moveToMap;
     }

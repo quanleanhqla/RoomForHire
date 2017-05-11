@@ -24,8 +24,12 @@ import com.directions.route.RoutingListener;
 import com.example.quanla.roomforhire.R;
 import com.example.quanla.roomforhire.activities.CoreActivity;
 import com.example.quanla.roomforhire.dataFake.DataFake;
+import com.example.quanla.roomforhire.dataFake.DataUser;
 import com.example.quanla.roomforhire.dataFake.models.Room;
+import com.example.quanla.roomforhire.dataFake.models.UserProf;
+import com.example.quanla.roomforhire.events.Event;
 import com.example.quanla.roomforhire.events.MoveToMap;
+import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.events.RoomEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,6 +47,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +77,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private double mLatitude;
     private double mLongitude;
 
+    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
     MapView mMapView;
     public MapFragment() {
         // Required empty public constructor
@@ -84,6 +95,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         EventBus.getDefault().register(this);
 
         mMapView.onResume();
+        loadData();
 
 
         final Context context = this.getContext();
@@ -205,12 +217,32 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        for(Polyline polyline: polylines){
+        for (Polyline polyline : polylines) {
             polyline.remove();
         }
         //Log.d(TAG, "clicked");
         LatLng latLng = marker.getPosition();
         direction(new Room(latLng.latitude, latLng.longitude));
+        for (final Room l : DataFake.instance.getAllRoom()) {
+            if (l.getLatitude() == latLng.latitude && l.getLongitude() == latLng.longitude) {
+                Location start = new Location("Start");
+                start.setLatitude(mLatitude);
+                start.setLongitude(mLongitude);
+                Location dest = new Location(l.getTitle());
+                dest.setLatitude(l.getLatitude());
+                dest.setLongitude(l.getLongitude());
+
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        // chuyen man hinh detail
+                        EventBus.getDefault().postSticky(new Event(l, MoveToMap.FROMNEAR));
+                        EventBus.getDefault().post(new ReplaceFragmentEvent(new DetailRoom(), true));
+                    }
+                });
+            }
+
+        }
         return false;
     }
 
@@ -356,4 +388,97 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         EventBus.getDefault().unregister(this);
         //EventBus.getDefault().removeAllStickyEvents();
     }
+
+    public void loadData(){
+        DataFake.instance.clear();
+        databaseReference.child("apartment").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+
+                DataFake.instance.add(room);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("villa").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+
+                DataFake.instance.add(room);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("room").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+
+                DataFake.instance.add(room);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 }

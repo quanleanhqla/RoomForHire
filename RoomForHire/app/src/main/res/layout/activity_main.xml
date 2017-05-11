@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="User Registration"
+            android:text="Đăng ký người dùng"
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal" />
 
@@ -30,14 +30,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:hint="Enter name" />
+            android:hint="Tên bạn là" />
 
         <EditText
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:hint="Enter phonenumber"
+            android:hint="Số điện thoại"
             android:inputType="number" />
 
         <EditText
@@ -45,14 +45,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:hint="Enter address" />
+            android:hint="Địa chỉ" />
 
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:hint="Enter email"
+            android:hint="Nhập địa chỉ email"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:hint="Enter password"
+            android:hint="Nhập password"
             android:inputType="textPassword" />
 
 
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Sign up" />
+            android:text="Đăng ký" />
 
         <TextView
             android:text="Already Registered? Signin Here"

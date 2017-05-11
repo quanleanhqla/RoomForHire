@@ -16,11 +16,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.quanla.roomforhire.R;
+import com.example.quanla.roomforhire.dataFake.DataFake;
+import com.example.quanla.roomforhire.dataFake.DataUser;
+import com.example.quanla.roomforhire.dataFake.models.Room;
+import com.example.quanla.roomforhire.dataFake.models.UserProf;
 import com.example.quanla.roomforhire.events.ReplaceFragmentEvent;
 import com.example.quanla.roomforhire.fragments.MainFragment;
+import com.google.android.gms.ads.formats.NativeAd;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,6 +40,9 @@ import org.greenrobot.eventbus.Subscribe;
 public class CoreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth firebaseAuth;
+    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
+    MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +60,15 @@ public class CoreActivity extends AppCompatActivity
         firebaseAuth = FirebaseAuth.getInstance();
 
 
+        if (firebaseAuth.getCurrentUser()==null){
+            finish();
+            startActivity(new Intent(CoreActivity.this, LoginActivity.class));
+        }
+        else{
+            loadData();
+            mainFragment = new MainFragment();
+            replaceFragment(mainFragment, false);
+        }
 
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -73,9 +97,9 @@ public class CoreActivity extends AppCompatActivity
 
         EventBus.getDefault().register(this);
 
-        MainFragment mainFragment = new MainFragment();
-        replaceFragment(mainFragment, false);
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -117,9 +141,14 @@ public class CoreActivity extends AppCompatActivity
 
         if(id==R.id.nav_account){
             if(firebaseAuth.getCurrentUser()==null){
+                finish();
                 startActivity(new Intent(CoreActivity.this, LoginActivity.class));
+
             }
-            else startActivity(new Intent(CoreActivity.this, ProfileActivity.class));
+            else{
+                finish();
+                startActivity(new Intent(CoreActivity.this, ProfileActivity.class));
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -132,6 +161,8 @@ public class CoreActivity extends AppCompatActivity
         super.onStart();
 
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -158,5 +189,124 @@ public class CoreActivity extends AppCompatActivity
                     .replace(R.id.fl, fragment)
                     .commit();
         }
+    }
+
+    public void loadData(){
+        DataFake.instance.clear();
+        databaseReference.child("apartment").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+                databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("apartment").child(room.getTitle()).setValue(room);
+                DataFake.instance.add(room);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("villa").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+                databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("villa").child(room.getTitle()).setValue(room);
+                DataFake.instance.add(room);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("room").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Room room = dataSnapshot.getValue(Room.class);
+                databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("room").child(room.getTitle()).setValue(room);
+                DataFake.instance.add(room);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("userprof").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                UserProf userProf = dataSnapshot.getValue(UserProf.class);
+                DataUser.instance.add(userProf);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

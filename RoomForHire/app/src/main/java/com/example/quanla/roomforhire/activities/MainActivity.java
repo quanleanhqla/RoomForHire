@@ -131,10 +131,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //checking if success
                         if(task.isSuccessful()){
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            databaseReference.child("user").child(user.getUid()).setValue(new UserProf(user.getUid(), name, address, phone));
-                            transferData();
+                            databaseReference.child("user").child(user.getUid()).child("userprof").push().setValue(new UserProf(user.getUid(), name, address, phone));
+                            //transferData();
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
                         }else{
                             //display some message here
                             Toast.makeText(MainActivity.this,"Registration Error",Toast.LENGTH_LONG).show();
@@ -160,12 +161,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void transferData(){
+
+
         DataFake.instance.clear();
         databaseReference.child("apartment").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);
-                databaseReference.child("user").child("apartment").setValue(room);
+                databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("apartment").child(room.getTitle()).setValue(room);
+
             }
 
             @Override
@@ -192,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);
-                databaseReference.child("user").child("villa").setValue(room);
+                databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("villa").child(room.getTitle()).setValue(room);
+
             }
 
             @Override
@@ -219,7 +224,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Room room = dataSnapshot.getValue(Room.class);
-                databaseReference.child("user").child("room").setValue(room);
+                databaseReference.child("user").child(firebaseAuth.getCurrentUser().getUid()).child("room").child(room.getTitle()).setValue(room);
+
             }
 
             @Override
@@ -242,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
 
     }
 }

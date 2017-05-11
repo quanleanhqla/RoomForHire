@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
+
                         //if the task is successfull
                         if(task.isSuccessful()){
                             //start the profile activity
@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         }
                         else Toast.makeText(LoginActivity.this, "Invalid Account", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 });
 

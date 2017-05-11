@@ -10,6 +10,7 @@ import com.example.quanla.roomforhire.adapters.viewholders.RoomHolder;
 import com.example.quanla.roomforhire.dataFake.DataMark;
 import com.example.quanla.roomforhire.dataFake.DataRoom;
 import com.example.quanla.roomforhire.dataFake.models.Room;
+import com.example.quanla.roomforhire.events.MoveToMap;
 import com.example.quanla.roomforhire.events.RoomEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,7 +38,7 @@ public class MarkAdapter extends RecyclerView.Adapter<RoomHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().postSticky(new RoomEvent(room));
+                EventBus.getDefault().postSticky(new RoomEvent(room, MoveToMap.FROMDETAIL));
             }
         });
 

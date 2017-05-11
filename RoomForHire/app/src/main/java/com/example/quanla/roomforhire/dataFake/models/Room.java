@@ -25,6 +25,7 @@ public class Room  {
     private String state;
     private String dientich;
     private String danhmuc;
+    private String url;
 
     public Room() {
 
@@ -172,6 +173,14 @@ public class Room  {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
