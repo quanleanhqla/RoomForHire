@@ -12,7 +12,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/house"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -29,7 +29,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activities.PhotoActivity" />
         <activity
             android:name=".activities.CoreActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -42,7 +41,7 @@
 
         </activity>
         <activity android:name=".activities.UploadActivity" />
-        <activity android:name=".activities.MainActivity" >
+        <activity android:name=".activities.RegisterActivity" >
 
         </activity>
         <activity android:name=".activities.ProfileActivity" />

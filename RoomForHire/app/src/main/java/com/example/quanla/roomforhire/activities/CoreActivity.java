@@ -65,7 +65,7 @@ public class CoreActivity extends AppCompatActivity
             startActivity(new Intent(CoreActivity.this, LoginActivity.class));
         }
         else{
-            loadData();
+            //loadData();
             mainFragment = new MainFragment();
             replaceFragment(mainFragment, false);
         }

@@ -4,6 +4,7 @@ package com.example.quanla.roomforhire.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -13,7 +14,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -77,6 +85,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private double mLatitude;
     private double mLongitude;
 
+
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     MapView mMapView;
@@ -93,6 +102,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
+
 
         mMapView.onResume();
         loadData();
@@ -480,5 +491,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         });
 
     }
+
 
 }

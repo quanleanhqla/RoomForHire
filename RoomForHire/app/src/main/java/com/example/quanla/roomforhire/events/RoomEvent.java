@@ -12,7 +12,7 @@ public class RoomEvent {
 
     public RoomEvent(Room room, MoveToMap moveToMap) {
         this.room = room;
-        moveToMap = moveToMap;
+        this.moveToMap = moveToMap;
     }
 
     public Room getRoom() {
